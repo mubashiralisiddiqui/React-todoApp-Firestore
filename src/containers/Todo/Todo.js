@@ -23,7 +23,10 @@ export default class Todo extends Component {
     componentWillMount() {
         scriptRef.onSnapshot((d) => {
             let array = [];
-            d.forEach(doc => { array.push(doc.data()) })
+            d.forEach(doc => { 
+                console.log(doc.id)
+                array.push(doc.data())
+             })
             this.setState({ todos: array })
         })
     }
@@ -37,6 +40,7 @@ export default class Todo extends Component {
         const ref = scriptRef.doc()
         ref.set({
             task: this.state.text,
+            id:ref.id
 
         })
             .then(function (docRef) {
@@ -46,21 +50,32 @@ export default class Todo extends Component {
                 console.error("Error adding document: ", error);
             });
     }
+    handleDelete = (id) => {
+        const ref = scriptRef.doc(id);
+        ref.delete()
+        .then((d) => {
+            console.log(d)
+        })
+            .catch((e) => {
+                console.log(e)
+            })
+    }
     render() {
         return (
             <div className="container">
-                <div className="formcontainer">
-                    <form onSubmit={(e) => this.addTodo(e)} className="form-inline">
-                        <div className="form-group">
-                            <input placeholder="Add todo"
-                                className="form-control"
-                                type="text"
-                                onChange={this.handleChange} />
-                            <button className="btn btn-primary" onClick={this.addTodo}>ADD</button>
-                        </div>
-                    </form>
-                </div>
-                <List todos={this.state.todos} />
+                <form onSubmit={(e) => this.addTodo(e)} className="form-inline">
+                    <div className="form-group">
+                        <input placeholder="Add todo"
+                            className="form-control input-lg"
+                            type="text"
+                            onChange={this.handleChange} />
+                        <button className="btn btn-primary" onClick={this.addTodo}>ADD</button>
+                    </div>
+                </form>
+                <List 
+                todos={this.state.todos} 
+                handleDelete={this.handleDelete}
+                />
             </div>
         )
     }

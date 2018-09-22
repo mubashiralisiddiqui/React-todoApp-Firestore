@@ -1,6 +1,6 @@
-    /**
- * import modules
- */
+/**
+* import modules
+*/
 import React, { Component, Fragment } from 'react';
 
 /**
@@ -8,11 +8,23 @@ import React, { Component, Fragment } from 'react';
  */
 export default class ListItem extends Component {
     render() {
-        const{title}=this.props
+        const { title, handleDelete, id } = this.props
         return (
             <Fragment>
-                <li className="list-group-item list-group-item-primary"  >
+                <li
+                    className="list-group-item list-group-item-primary"
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}
+                >
                     {title}
+                    <ion-icon
+                        name="trash" style={{ color: 'red' }}
+                        onClick={() => handleDelete(id)}
+                    >
+                    </ion-icon>
                 </li>
             </Fragment>
         )
